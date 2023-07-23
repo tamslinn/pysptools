@@ -101,15 +101,15 @@ class SavitzkyGolay(object):
             copyright of this file.
         """
         h, w, numBands = M.shape
-        self.dbands = np.ones((h, w, numBands), dtype=np.float)
+        self.dbands = np.ones((h, w, numBands), dtype=np.float32)
         for i in range(numBands):
             self.dbands[:,:,i] = self._denoise2d(M[:,:,i], window_size, order, derivative)
         return self.dbands
 
     def _denoise1d(self, M, window_size, order, deriv, rate):
         try:
-            window_size = np.abs(np.int(window_size))
-            order = np.abs(np.int(order))
+            window_size = np.abs(np.int32(window_size))
+            order = np.abs(np.int32(order))
         except ValueError as msg:
             raise ValueError("in SavitzkyGolay.denoise_spectra(), window_size and order have to be of type int")
         if window_size % 2 != 1 or window_size < 1:
@@ -125,8 +125,8 @@ class SavitzkyGolay(object):
         # pad the signal at the extremes with
         # values taken from the signal itself
         N, p = M.shape
-        dn = np.ones((N,p), dtype=np.float)
-        long_signal = np.ndarray(p+2, dtype=np.float)
+        dn = np.ones((N,p), dtype=np.float32)
+        long_signal = np.ndarray(p+2, dtype=np.float32)
         for i in range(N):
             y = M[i]
             firstvals = y[0] - np.abs( y[1:half_window+1][::-1] - y[0] )
